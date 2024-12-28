@@ -1,0 +1,6 @@
+[webserver]
+ec2-34-227-227-43.compute-1.amazonaws.com
+
+[webserver:vars]
+ansible_ssh_private_key_file=~/.ssh/ansible-keypair.pem
+ansible_user=mauricio

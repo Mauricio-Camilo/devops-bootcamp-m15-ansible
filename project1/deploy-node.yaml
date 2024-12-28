@@ -1,0 +1,45 @@
+---
+- name: Install node and npm
+  hosts: webserver
+  become: True  
+  tasks:  
+    - name: Update apt repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600 # Module apt
+    - name: Install nodejs and npm
+      apt: 
+        pkg:
+          - nodejs
+          - npm  
+
+- name: Create new linux user for node app
+  hosts: webserver
+  become: yes # Use root user to create the new user
+  tasks:
+    - name: Create linux user
+      user:
+        name: mauricio
+        comment: Mauricio Admin
+        group: admin
+
+- name: Deploy nodejs app
+  hosts: webserver
+  become: True
+  become_user: mauricio # Tell ansible to use the created user to run this play
+  tasks: 
+    - name: Unpack the nodejs file
+      unarchive:
+        src: /home/mauricio/Documentos/nodejs-app/nodejs-app-1.0.0.tgz
+        dest: /home/mauricio
+    - name: Install dependencies
+      npm:
+        path: /home/mauricio/package
+    - name: Start the application
+      command: 
+        chdir: /home/mauricio/package/app
+        cmd: node server
+      async: 1000
+      poll: 0
+    - name: Ensure app is running
+      shell: ps aux | grep node
+      register: app_status # Save the shell result in a variable
+    - debug: msg={{app_status.stdout_lines}}  
