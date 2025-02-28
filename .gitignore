@@ -1,0 +1,4 @@
+terraform*
+.terraform.lock*
+tf.local*
+tf.state*

@@ -1,0 +1,61 @@
+---
+- name: Install Docker
+  hosts: all
+  become: yes  
+  tasks:
+    - name: Install Docker
+      shell: |
+        sudo yum update -y
+        sudo yum install -y docker
+        sudo systemctl start docker
+        sudo systemctl enable docker
+    - name: Ensure Docker is running
+      systemd:
+        name: docker
+        state: started
+
+- name: Install Docker-compose
+  hosts: all
+  become: yes  
+  tasks:
+    - name: Create docker-compose directory
+      file:
+        path: ~/.docker/cli-plugins
+        state: directory
+    - name: Get architecture of remote machine
+      shell: uname -m
+      register: remote_arch
+    - name: Install docker-compose
+      get_url: 
+        url: "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-{{ remote_arch.stdout }}"
+        dest: ~/.docker/cli-plugins/docker-compose
+        mode: +x
+
+- name: Add ec2-user to docker groups
+  hosts: all
+  become: yes  
+  tasks:
+    - name: Add ec2-user to docker group
+      user: 
+        name: ec2-user
+        groups: docker
+        append: yes
+    - name: Reconnect to server session
+      meta: reset_connection
+
+- name: Start docker containers
+  hosts: all
+  vars_files:
+    - project-vars
+  tasks:
+    - name: Copy docker compose
+      copy:
+        src: /home/mauricio/Documentos/docker-compose.yaml
+        dest: /home/ec2-user/docker-compose.yaml
+    - name: Docker login
+      docker_login: 
+        username: mauriciocamilo
+        password: "{{docker_password}}"
+    - name: Start containers from compose
+      community.docker.docker_compose_v2: 
+        project_src: /home/ec2-user
