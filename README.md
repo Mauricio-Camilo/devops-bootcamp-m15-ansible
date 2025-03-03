@@ -683,7 +683,7 @@ Project files: project5 folder
   ```
 - Inventory File
 
-To create the inventory YAML file, it must specify the plugin name to be used. The minimal configuration for this file is shown below:
+  To create the inventory YAML file, it must specify the plugin name to be used. The minimal configuration for this file is shown below:
 
   ```sh
     plugin: aws_ec2
@@ -816,14 +816,14 @@ Project files: project6 folder
 
 - Verifying Namespace Creation
 
-After executing the playbook, the namespace was successfully created and verified using:
+  After executing the playbook, the namespace was successfully created and verified using:
 
   ```sh
     kubectl get namespaces
   ```
 - Deploy App in New Namespace
 
-The next step was to create a simple NGINX deployment in the newly created namespace using Ansible.
+  The next step was to create a simple NGINX deployment in the newly created namespace using Ansible.
 
   ```sh
     - name: Deploy nginx app
@@ -951,7 +951,7 @@ Project files: https://github.com/Mauricio-Camilo/java-maven-app/tree/feature/an
     }  
   ```
 
-This step copies the files to the Ansible server. The sshagent step is used for SSH authentication using the ansible-server-key. The second command also transfers the private key for connecting to the EC2 instances.
+  This step copies the files to the Ansible server. The sshagent step is used for SSH authentication using the ansible-server-key. The second command also transfers the private key for connecting to the EC2 instances.
 
 - Create a New Pipeline in Jenkins
 
@@ -1066,7 +1066,7 @@ Project files: project8 folder
 
   To test the roles, EC2 instances are created using a previous Terraform recipe, and a dynamic inventory (inventory_aws_ec2.yaml) is used to manage the instances.
 
-Running the playbook:
+  Running the playbook:
 
   ```sh
     ansible-playbook deploy-docker-with-roles.yaml -i inventory_aws_ec2.yaml
@@ -1102,7 +1102,7 @@ Running the playbook:
         dest: /home/user/docker-compose.yaml   
   ```
 
-With this, Ansible will automatically look in the files directory within the role for the docker-compose.yaml file.
+  With this, Ansible will automatically look in the files directory within the role for the docker-compose.yaml file.
 
 - Customize Roles with Variables
 
@@ -1115,7 +1115,7 @@ With this, Ansible will automatically look in the files directory within the rol
     docker_username: mauriciocamilo  
   ```
 
-To define these variables for the playbook, a vars/main.yaml file is created within the role.
+  To define these variables for the playbook, a vars/main.yaml file is created within the role.
 
 - Set Default Values for Variables
 
