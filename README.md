@@ -210,7 +210,9 @@ Project files: project2 folder
                 remote_src: yes  # Specifies that the source is on the remote server
   ```
   creates: Prevents re-downloading if the file already exists.
+  
   remote_src: yes: Indicates that the file is already on the remote server.
+  
   Renaming the Folder Dynamically
 
   In the Nexus module, the untarred folder is not renamed, which can cause issues if the version changes. To handle this dynamically, I used the find command to locate the folder containing nexus- and rename it.
@@ -230,8 +232,10 @@ Project files: project2 folder
         command: mv {{ nexus_folder.stdout }} /opt/nexus
         when: nexus_folder.stdout != "/opt/nexus"
   ```
-  find command:Finds the folder starting with nexus- under /opt without diving into subdirectories.
+  find command: Finds the folder starting with nexus- under /opt without diving into subdirectories.
+  
   register: Captures the output (folder name) to use in the next task.
+  
   when: Ensures renaming only happens if the folder isn’t already named /opt/nexus.
     
 - Running the Ansible Playbook
@@ -431,7 +435,8 @@ Project files: project3 folder
         state: present
   ```
 - Issue: Python Interpreter Error
-  I encountered an error trying to run this playbook: No such file or directory: '/usr/bin/python'
+
+  I encountered an error trying to run this playbook: No such file or directory: '/usr/bin/python'.
   I couldn’t resolve it to use Python 3 instead of Python on the server, so I installed Docker in a different way:
 
   ```sh
